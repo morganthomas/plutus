@@ -418,35 +418,35 @@ instance Flat DefaultFun where
               CharToString             -> 22
               Append                   -> 23
               Trace                    -> 24
-              Nop1                     -> 25
-              Nop2                     -> 26
-              Nop3                     -> 27
-              EqualsString             -> 28
-              EncodeUtf8               -> 29
-              DecodeUtf8               -> 30
-              FstPair                  -> 31
-              SndPair                  -> 32
-              NullList                 -> 33
-              HeadList                 -> 34
-              TailList                 -> 35
-              ConstrData               -> 36
-              MapData                  -> 37
-              ListData                 -> 38
-              IData                    -> 39
-              BData                    -> 40
-              UnConstrData             -> 41
-              UnMapData                -> 42
-              UnListData               -> 43
-              UnIData                  -> 44
-              UnBData                  -> 45
-              EqualsData               -> 46
-              ChooseData               -> 47
-              ChooseUnit               -> 48
-              MkPairData               -> 49
-              MkNilData                -> 50
-              MkNilPairData            -> 51
-              MkCons                   -> 52
-              Blake2b_256              -> 53
+              EqualsString             -> 25
+              EncodeUtf8               -> 26
+              DecodeUtf8               -> 27
+              FstPair                  -> 28
+              SndPair                  -> 29
+              NullList                 -> 30
+              HeadList                 -> 31
+              TailList                 -> 32
+              ConstrData               -> 33
+              MapData                  -> 34
+              ListData                 -> 35
+              IData                    -> 36
+              BData                    -> 37
+              UnConstrData             -> 38
+              UnMapData                -> 39
+              UnListData               -> 40
+              UnIData                  -> 41
+              UnBData                  -> 42
+              EqualsData               -> 43
+              ChooseData               -> 44
+              ChooseUnit               -> 45
+              MkPairData               -> 46
+              MkNilData                -> 47
+              MkNilPairData            -> 48
+              MkCons                   -> 49
+              Blake2b_256              -> 50
+              Nop1                     -> error "not supposed to serialise nop1"
+              Nop2                     -> error "not supposed to serialise nop2"
+              Nop3                     -> error "not supposed to serialise nop3"
 
     decode = go =<< decodeBuiltin
         where go 0  = pure AddInteger
@@ -474,35 +474,32 @@ instance Flat DefaultFun where
               go 22 = pure CharToString
               go 23 = pure Append
               go 24 = pure Trace
-              go 25 = pure Nop1
-              go 26 = pure Nop2
-              go 27 = pure Nop3
-              go 28 = pure EqualsString
-              go 29 = pure EncodeUtf8
-              go 30 = pure DecodeUtf8
-              go 31 = pure FstPair
-              go 32 = pure SndPair
-              go 33 = pure NullList
-              go 34 = pure HeadList
-              go 35 = pure TailList
-              go 36 = pure ConstrData
-              go 37 = pure MapData
-              go 38 = pure ListData
-              go 39 = pure IData
-              go 40 = pure BData
-              go 41 = pure UnConstrData
-              go 42 = pure UnMapData
-              go 43 = pure UnListData
-              go 44 = pure UnIData
-              go 45 = pure UnBData
-              go 46 = pure EqualsData
-              go 47 = pure ChooseData
-              go 48 = pure ChooseUnit
-              go 49 = pure MkPairData
-              go 50 = pure MkNilData
-              go 51 = pure MkNilPairData
-              go 52 = pure MkCons
-              go 53 = pure Blake2b_256
+              go 25 = pure EqualsString
+              go 26 = pure EncodeUtf8
+              go 27 = pure DecodeUtf8
+              go 28 = pure FstPair
+              go 29 = pure SndPair
+              go 30 = pure NullList
+              go 31 = pure HeadList
+              go 32 = pure TailList
+              go 33 = pure ConstrData
+              go 34 = pure MapData
+              go 35 = pure ListData
+              go 36 = pure IData
+              go 37 = pure BData
+              go 38 = pure UnConstrData
+              go 39 = pure UnMapData
+              go 40 = pure UnListData
+              go 41 = pure UnIData
+              go 42 = pure UnBData
+              go 43 = pure EqualsData
+              go 44 = pure ChooseData
+              go 45 = pure ChooseUnit
+              go 46 = pure MkPairData
+              go 47 = pure MkNilData
+              go 48 = pure MkNilPairData
+              go 49 = pure MkCons
+              go 50 = pure Blake2b_256
               go _  = fail "Failed to decode BuiltinName"
 
     size _ n = n + builtinTagWidth
