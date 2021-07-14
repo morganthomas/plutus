@@ -22,6 +22,7 @@ module Plutus.PAB.Effects.Contract.Builtin(
     Builtin
     , ContractConstraints
     , SomeBuiltin(..)
+    , BuiltinContract(..)
     , BuiltinHandler(..)
     , handleBuiltin
     -- * Extracting schemas from contracts
@@ -97,6 +98,10 @@ instance PABContract (Builtin a) where
     type State (Builtin a) = SomeBuiltinState a
     serialisableState _ = getResponse
 
+class BuiltinContract a where
+  schema :: a -> [FunctionSchema FormSchema] -- ^ The schema (construct with 'endpointsToSchemas'. Can also be an empty list)
+  contractDefinition :: a -> SomeBuiltin -- ^ The actual contract
+
 -- | Defined in order to prevent type errors like: "Couldn't match type 'effs'
 -- with 'effs1'".
 newtype BuiltinHandler a = BuiltinHandler
@@ -112,13 +117,13 @@ newtype BuiltinHandler a = BuiltinHandler
 --   @a@.
 handleBuiltin ::
     forall a.
-    (a -> [FunctionSchema FormSchema]) -- ^ The schema (construct with 'endpointsToSchemas'. Can also be an empty list)
-    -> (a -> SomeBuiltin) -- ^ The actual contract
-    -> BuiltinHandler a
-handleBuiltin mkSchema initialise = BuiltinHandler $ \case
-    InitialState i c           -> case initialise c of SomeBuiltin c' -> initBuiltin i c'
+    ( BuiltinContract a
+    )
+    => BuiltinHandler a
+handleBuiltin = BuiltinHandler $ \case
+    InitialState i c           -> case contractDefinition c of SomeBuiltin c' -> initBuiltin i c'
     UpdateContract i _ state p -> case state of SomeBuiltinState s w -> updateBuiltin i s w p
-    ExportSchema a             -> pure $ mkSchema a
+    ExportSchema a             -> pure $ schema a
 
 getResponse :: forall a. SomeBuiltinState a -> ContractResponse Value Value Value PABReq
 getResponse (SomeBuiltinState s w) =
