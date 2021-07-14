@@ -212,4 +212,5 @@ deriving via GenericExMemoryUsage [a] instance ExMemoryUsage a => ExMemoryUsage 
 
 -- TODO: presumably in the long run we'll want to do something a bit more careful here
 -- (maybe for costing purposes depth would be a better measure than total size, for instance).
-deriving via GenericExMemoryUsage Data instance ExMemoryUsage Data
+instance ExMemoryUsage Data where
+    memoryUsage _ = 1
